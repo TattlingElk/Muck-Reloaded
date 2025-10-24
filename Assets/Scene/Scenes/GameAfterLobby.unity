@@ -1708,7 +1708,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1010}
   - component: {fileID: 3167}
-  - component: {fileID: 2851}
   m_Layer: 0
   m_Name: GenerateNavmesh
   m_TagString: Untagged
@@ -31466,7 +31465,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 294, y: -13.333314}
+  m_AnchoredPosition: {x: 293.99994, y: -13.333314}
   m_SizeDelta: {x: 294, y: 31.4}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!224 &2019
@@ -48070,35 +48069,6 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
---- !u!114 &2851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 96}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 008fb4e6343a55e4394121ed15ecf573, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_CollectObjects: 0
-  m_Size: {x: 50, y: 50, z: 50}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 512
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 1
-  m_TileSize: 64
-  m_OverrideVoxelSize: 1
-  m_VoxelSize: 1
-  m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: 86921844ae2c36241bca12b57b5ad5b2, type: 2}
 --- !u!114 &2852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69117,7 +69087,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a72d263878e5bc644b1a42e02110e7a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  surface: {fileID: 2851}
+  surface: {fileID: 1079838651}
 --- !u!114 &3168
 MonoBehaviour:
   m_ObjectHideFlags: 0
