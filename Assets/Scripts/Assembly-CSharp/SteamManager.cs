@@ -245,19 +245,29 @@ public class SteamManager : MonoBehaviour
             Debug.LogError("Attempted to join the same lobby twice...");
             return;
         }
+
+        // You're joining someone else's lobby
         LocalClient.serverOwner = false;
+
         leaveLobby();
+
         if (await lobby.Join() != RoomEnter.Success)
         {
             Debug.Log("failed to join lobby");
             StatusMessage.Instance.DisplayMessage("Couldn't find lobby. Make sure it's a valid lobbyID from someone");
             return;
         }
+
         currentLobby = lobby;
         lobbyOwnerSteamId = lobby.Owner.Id.Value;
+
+        //NEW LINE: tell the client who the server host is
+        LocalClient.instance.serverHost = lobby.Owner.Id.Value;
+
         LobbyPartnerDisconnected = false;
         AcceptP2P(lobbyOwnerSteamId);
     }
+
 
     private void AcceptP2P(SteamId opponentId)
     {
@@ -288,25 +298,37 @@ public class SteamManager : MonoBehaviour
             lobby.Leave();
             return;
         }
+
         string version = Application.version;
         string data = lobby.GetData("Version");
         if (version != data)
         {
-            StatusMessage.Instance.DisplayMessage("You're on version " + version + ", but server is on " + data + ". Update your game on Steam to play.\n<size=60%>If there is no update button, right click on the game > manage > uninstall, then install again");
+            StatusMessage.Instance.DisplayMessage(
+                "You're on version " + version + ", but server is on " + data +
+                ". Update your game on Steam to play.\n<size=60%>If there is no update button, right click on the game > manage > uninstall, then install again");
             leaveLobby();
+            return;
         }
-        else
+
+        LobbyVisuals.Instance.OpenLobby(lobby);
+
+        // NEW: record the lobby owner everywhere
+        originalLobbyOwnerId = lobby.Owner.Id.Value;
+
+        // NEW: are we the owner of this lobby?
+        LocalClient.serverOwner = (lobby.Owner.Id.Value == SteamClient.SteamId.Value);
+
+        // NEW: all clients (including host machine) must know who the server is
+        LocalClient.instance.serverHost = lobby.Owner.Id.Value;
+
+        // Keep your existing P2P accept + chat string
+        if (lobby.MemberCount != 1)
         {
-            LobbyVisuals.Instance.OpenLobby(lobby);
-            LocalClient.serverOwner = false;
-            originalLobbyOwnerId = lobby.Owner.Id.Value;
-            if (lobby.MemberCount != 1)
-            {
-                AcceptP2P(originalLobbyOwnerId);
-                lobby.SendChatString("incoming player info");
-            }
+            AcceptP2P(originalLobbyOwnerId);
+            lobby.SendChatString("incoming player info");
         }
     }
+
 
     private async void OnGameLobbyJoinRequestedCallback(Lobby joinedLobby, SteamId id)
     {
@@ -332,7 +354,7 @@ public class SteamManager : MonoBehaviour
 
     private void OnLobbyCreatedCallback(Result result, Lobby lobby)
     {
-        Debug.LogError("lobbyu created opkay");
+        Debug.LogError("lobby created");
         LobbyPartnerDisconnected = false;
         if (result != Result.OK)
         {
