@@ -50,7 +50,7 @@ Material:
     - _WindStrength: 0.2
     - _ZWrite: 1
     m_Colors:
-    - _BottomColor: {r: 0.86392826, g: 0.36081058, b: 0.1614882, a: 0}
+    - _BottomColor: {r: 0.30355525, g: 0.5989859, b: 0.44908702, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _TopColor: {r: 1.2958924, g: 0.5412159, b: 0.24223231, a: 0}
+    - _TopColor: {r: 0.45533288, g: 0.89847887, b: 0.67363054, a: 0}
