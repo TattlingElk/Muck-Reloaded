@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 1
-  amount: {fileID: 0}
+  amount: {fileID: 6618550976254236315}
   itemImage: {fileID: 114706958414078271}
   slot: {fileID: 114675739318430888}
   currentItem: {fileID: 0}

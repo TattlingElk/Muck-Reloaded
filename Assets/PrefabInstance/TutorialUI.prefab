@@ -99,7 +99,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -221,6 +221,8 @@ MonoBehaviour:
   icon: {fileID: 114212171486023184}
   item: {fileID: 910863718055098346}
   checkedBox: {fileID: 2800000, guid: 546c05aa259a6764aa748816371e60ba, type: 3}
+  fadeStart: 1.5
+  fadeTime: 1.5
 --- !u!1 &1171061461768774
 GameObject:
   m_ObjectHideFlags: 0

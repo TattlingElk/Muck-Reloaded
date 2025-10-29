@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TextMeshProSprite
-  m_Shader: {fileID: 4800000, guid: 16e327ef23a2dd045a790dd60721b412, type: 3}
+  m_Shader: {fileID: 4800000, guid: cf81c85f95fe47e1a27f6ae460cf182c, type: 3}
   m_ShaderKeywords: UNITY_UI_CLIP_RECT
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0

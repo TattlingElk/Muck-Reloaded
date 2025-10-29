@@ -65,11 +65,12 @@ public class ClientHandle : MonoBehaviour
         ItemManager.Instance.DropResource(fromClient, dropTableId, num);
     }
 
+    // ----- CHANGED: respects shared-pickups for powerups -----
     public static void PickupItem(Packet packet)
     {
-        int num = packet.ReadInt();
-        int num2 = packet.ReadInt();
-        Item component = ItemManager.Instance.list[num2].GetComponent<Item>();
+        int who = packet.ReadInt();      // player id who picked it
+        int key = packet.ReadInt();      // object key in ItemManager.Instance.list
+        Item component = ItemManager.Instance.list[key].GetComponent<Item>();
         if (!component)
         {
             return;
@@ -78,22 +79,45 @@ public class ClientHandle : MonoBehaviour
         {
             GameManager.instance.powerupsPickedup = true;
         }
-        if (LocalClient.instance.myId == num && !LocalClient.serverOwner)
+
+        bool isHost = LocalClient.serverOwner;
+        bool amPicker = (LocalClient.instance.myId == who);
+
+        // For powerups: if shared pick-ups are ON, give to everyone.
+        bool share = (GameManager.gameSettings != null &&
+                      GameManager.gameSettings.sharedPickups == GameSettings.SharedPickups.On);
+
+        if ((bool)component.item)
         {
-            if ((bool)component.item)
+            // Regular items behave the same as before: only picker (and only on non-host client) adds locally.
+            if (amPicker && !isHost)
             {
                 InventoryUI.Instance.AddItemToInventory(component.item);
             }
-            else if ((bool)component.powerup)
+        }
+        else if ((bool)component.powerup)
+        {
+            if (share)
             {
-                PowerupInventory.Instance.AddPowerup(component.powerup.name, component.powerup.id, num2);
+                // Everyone gains the powerup (host + all clients)
+                PowerupInventory.Instance.AddPowerup(component.powerup.name, component.powerup.id, key);
+            }
+            else
+            {
+                if (amPicker && !isHost)
+                {
+                    PowerupInventory.Instance.AddPowerup(component.powerup.name, component.powerup.id, key);
+                }
             }
         }
-        if (!LocalClient.serverOwner)
+
+        // Non-host clients locally remove the world object; host removes via authority/server path.
+        if (!isHost)
         {
-            ItemManager.Instance.PickupItem(num2);
+            ItemManager.Instance.PickupItem(key);
         }
     }
+    // ----- end change -----
 
     public static void SpawnEffect(Packet packet)
     {
@@ -256,6 +280,7 @@ public class ClientHandle : MonoBehaviour
         GameManager.instance.StartGame();
     }
 
+    // ----- CHANGED: reads one more int (sharedPickups) and passes to GameSettings ctor -----
     public static void StartGame(Packet packet)
     {
         if (!NetworkController.Instance.loading)
@@ -267,7 +292,11 @@ public class ClientHandle : MonoBehaviour
             int difficulty = packet.ReadInt();
             int gameLength = packet.ReadInt();
             int multiplayer = packet.ReadInt();
-            GameManager.gameSettings = new GameSettings(seed, gameMode, friendlyFire, difficulty, gameLength, multiplayer);
+
+            // NEW:
+            int sharedPickups = packet.ReadInt();
+
+            GameManager.gameSettings = new GameSettings(seed, gameMode, friendlyFire, difficulty, gameLength, multiplayer, sharedPickups);
             MonoBehaviour.print("Game settings successfully loaded");
             MonoBehaviour.print("loading game scene, assigned id: " + LocalClient.instance.myId);
             int num = packet.ReadInt();
@@ -282,6 +311,7 @@ public class ClientHandle : MonoBehaviour
             ClientSend.StartedLoading();
         }
     }
+    // ----- end change -----
 
     public static void PlayerPosition(Packet packet)
     {

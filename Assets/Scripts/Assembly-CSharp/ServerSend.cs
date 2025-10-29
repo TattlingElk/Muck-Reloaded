@@ -199,6 +199,10 @@ public class ServerSend
             packet.Write((int)settings.difficulty);
             packet.Write((int)settings.gameLength);
             packet.Write((int)settings.multiplayer);
+
+            // NEW: write Shared Pickups flag (0 = Off, 1 = On)
+            packet.Write((int)settings.sharedPickups);
+
             List<Player> list = new List<Player>();
             for (int i = 0; i < Server.clients.Values.Count; i++)
             {
@@ -207,16 +211,19 @@ public class ServerSend
                     list.Add(Server.clients[i].player);
                 }
             }
+
             packet.Write(list.Count);
             foreach (Player item in list)
             {
                 packet.Write(item.id);
                 packet.Write(item.username);
             }
+
             Debug.Log("Sending start game packet");
             SendTCPData(playerLobbyId, packet);
         }
     }
+
 
     public static void ConnectionSuccessful(int toClient)
     {
